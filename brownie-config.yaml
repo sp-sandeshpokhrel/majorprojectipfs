@@ -1,0 +1,15 @@
+dotenv: .env
+dependencies:
+  - smartcontractkit/chainlink-brownie-contracts@0.4.0
+  - OpenZeppelin/openzeppelin-contracts@4.2.0
+  - aave/protocol-v2@1.0.1
+compiler:
+  solc:
+    remappings:
+      - '@chainlink=smartcontractkit/chainlink-brownie-contracts@0.4.0'
+      - '@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.2.0'
+      - '@aave=aave/protocol-v2@1.0.1'
+networks:
+  default: 'development'
+  rinkeby:
+    vrf: '0x6168499c0cFfCaCD319c818142124B7A15E857ab'

@@ -1,0 +1,136 @@
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+
+.nav-bar{
+  display: flex;
+  flex-direction: row-reverse;
+  padding-top: 1.5rem;
+  padding-right: 2rem;  
+}
+
+.login-button{
+  /* height: 5rem;
+  width: 7.5rem; */
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.info {
+  border-color: #2196F3;
+  color: dodgerblue
+}
+
+.info:hover {
+  background: #2196F3;
+  color: white;
+}
+
+
+
+.table-container{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: scroll;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 70vw;
+  border: 1px solid #ddd;
+  box-shadow: 5px 5px 5px black;
+  height: 50vh;
+  display: block;
+  overflow: scroll;
+  max-width: fit-content;
+}
+
+table::-webkit-scrollbar{
+  display: none; 
+ }
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
+
+tbody>tr{
+  max-height: 50px;
+}
+
+
+tr:nth-child(even) {
+  background-color: #99ccff;
+}
+
+.table-top{
+  display: flex;
+
+}
+
+thead{
+  position: sticky;
+  top:0px;
+  background-color: white;
+  box-shadow: 0px 1px 5px rgb(137, 137, 137);
+  margin-bottom: 2px;
+}
+
+.form-container{
+  position:absolute;
+  margin-top: 10vh;
+  left: 25vw;
+}
+
+#file{
+  display: none;
+}
+
+.upload-label{
+  display: inline-block;
+  height: 3rem;
+  width: 10rem;
+  text-align: center;
+  padding-top: 1.5rem;
+  border: 2px solid black;
+  background-color: transparent;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.success {
+  border-color: #04AA6D;
+  color: green;
+}
+
+.success:hover {
+  background-color: #04AA6D;
+  color: white;
+}
+
+
+#upload-button{
+  height: 2rem;
+  width: 5rem;
+  margin-left: 2rem;
+  background-color: #e7e7e7;
+  border: 0px;
+  border-radius: 5px;
+
+}
+
+#upload-button:hover{
+  cursor: pointer;
+  background-color: #ddd;
+}
