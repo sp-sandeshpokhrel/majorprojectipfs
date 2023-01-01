@@ -1,10 +1,10 @@
-from brownie import Publicupload
+from brownie import Publicupload, privateupload
 from scripts.helpful_scripts import get_account
 
 
 def deploy():
     account = get_account()
-    pu = Publicupload.deploy({"from": account}, publish_source=True)
+    pu = privateupload.deploy({"from": account}, publish_source=True)
     return pu
 
 

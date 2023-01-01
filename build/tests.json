@@ -1,0 +1,16 @@
+{
+  "contracts": {
+    "privateupload": "05575b361c1d15879edb8a4fe6037dc1bfca0188",
+    "publicupload": "ccc9c8e705760192728950ed012d30b2eef31409"
+  },
+  "tests": {
+    "tests/test_cid.py": {
+      "coverage": false,
+      "isolated": false,
+      "results": "F",
+      "sha1": "77555d464d6517fd0be4d1e8da8c9f67bb7852f7",
+      "txhash": []
+    }
+  },
+  "tx": {}
+}

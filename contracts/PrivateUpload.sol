@@ -12,7 +12,7 @@ contract privateupload {
     }
 
     //mapping (address=>mapping(bytes32=>string)[]) usercid;
-    mapping(address => bytes32) publickey;
+    mapping(address => string) publickey;
     mapping(string => string) checkcid;
     mapping(address => File[]) userscid;
     mapping(address => File[]) sharedwithuser;

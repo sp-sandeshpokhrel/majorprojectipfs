@@ -1,0 +1,29 @@
+{
+  "1337": {
+    "Publicupload": [
+      "0x836f5717b1563951EbdBf35BC4AA9182c5778EF3",
+      "0xd16F8B11437e3d31575BC5Ea49420bfB7C3A57B0"
+    ],
+    "publicupload": [
+      "0x85f82b27bb0a91186e95D4A3b87B5Bcf6Ee0521c"
+    ]
+  },
+  "4": {
+    "Publicupload": [
+      "0x77dc6b7c464FdcC2bcA9847ffa458F7769585dc1",
+      "0x34177A5249fA84c7edA5143Ba1a7d4bC45F0a35a",
+      "0x511f0C54b445ca9d75c6C19053249079Dc98Bd00",
+      "0xCbA78E0b0764313A5aeBf96097Cd94a2B8bB4F6B"
+    ]
+  },
+  "5": {
+    "Publicupload": [
+      "0xD49784Ce243993557d1AD2e426eFEdca460edE1a"
+    ],
+    "privateupload": [
+      "0xa972dD488759310f9D1239971cdE3C543AF9D884",
+      "0x4bB75423F26f891C9944Dd1880ca7cE419b14187",
+      "0x0dB1fE9A1B3DF1e71d1161AE382301b635A36347"
+    ]
+  }
+}

@@ -5,11 +5,10 @@ import {ToastContainer,toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Navbar from "./Components/NavBar"
 import { Web3Storage } from "web3.storage"
-import { DAppProvider, Kovan, Rinkeby } from "@usedapp/core"
+import { DAppProvider, Goerli, Kovan, Rinkeby } from "@usedapp/core"
 import publicupload from "./build/Publicupload.json"
 import mapping from "./build/map.json"
 import {ethers} from "ethers"
-
 
 
 
@@ -28,7 +27,7 @@ async function storeFiles(){
   console.log(files[0].name)
   const cid = await client.put(files)
   toast.success("File Uploaded.")
-  const puaddress = mapping["4"]["Publicupload"][0]
+  const puaddress = mapping["5"]["Publicupload"][0]
   const { abi } = publicupload
   if (window.ethereum) {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -80,7 +79,7 @@ export default function App(){
   
   return(
     <DAppProvider config={{
-      networks: [Kovan, Rinkeby]
+      networks: [Kovan, Rinkeby,Goerli]
     }}>
       <Navbar />
       <FileUpload handleFile={handleFile} handleUpload={handleUpload} />

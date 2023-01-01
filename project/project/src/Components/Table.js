@@ -10,7 +10,7 @@ import { toast } from "react-toastify"
 export default function Table() {
     const { account } = useEthers()
     const isConnected = account !== undefined
-    const puaddress = mapping["4"]["Publicupload"][0]
+    const puaddress = mapping["5"]["Publicupload"][0]
     const { abi } = publicupload
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const puInterface = new utils.Interface(abi)
@@ -19,7 +19,7 @@ export default function Table() {
 
 
     async function deletee(cids: string) {
-        const puaddress = mapping["4"]["Publicupload"][0]
+        const puaddress = mapping["5"]["Publicupload"][0]
         const { abi } = publicupload
         if (window.ethereum) {
             const signer = provider.getSigner()
