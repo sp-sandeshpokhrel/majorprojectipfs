@@ -1,18 +1,30 @@
-import React from "react"
+import React,{useState} from "react"
 import Table from "./Components/Table"
 import FileUpload  from "./Components/FileUpload"
 import {ToastContainer,toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Navbar from "./Components/NavBar"
 import { Web3Storage } from "web3.storage"
-import { DAppProvider, Goerli, Kovan, Rinkeby } from "@usedapp/core"
+import privateupload from "./build/privateupload.json"
 import publicupload from "./build/Publicupload.json"
 import mapping from "./build/map.json"
 import {ethers} from "ethers"
+import "./Components/init"
+import {startEncryption,startDecryption} from './Components/encfunctions'
+import Enckey from "./Components/try"
+import FileSaver from "file-saver";
 
 
 
 
+
+export default function App(){
+
+  const [connected, setConnected] = useState(false);
+  const [address, setAddress] = useState(null);
+  const [up, setUp] = useState(false)
+  const [userMode, setUserMode] = useState(true)
+  
 function makeStorageClient(){
   return new Web3Storage({token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGIzQzU5OTQ4MDVGMDMyYUI3N2I3MmEwZkJlMTVBMDgyREUyZmMwMTMiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjA1NjE1MTQ5MTksIm5hbWUiOiJ0ZXN0In0.kfsVeIp6ac-SocvBAp0FlPwSXJwOGGvUdfIIUKj2hkg"})
 }
@@ -21,14 +33,19 @@ function getFiles(){
   return fileInput.files
 }
 
-async function storeFiles(){
+
+//store file on ipfs and store the cid and keys on blockchain for encrypted
+async function storeFiles(setUp){
+  
   const client = makeStorageClient()
   const files = getFiles()
   console.log(files[0].name)
-  const cid = await client.put(files)
+  const {enc,iv,key}=await startEncryption(files[0]);
+  console.log(enc)
+  const cid = await client.put([enc])
   toast.success("File Uploaded.")
-  const puaddress = mapping["5"]["Publicupload"][0]
-  const { abi } = publicupload
+  const puaddress = mapping["5"]["privateupload"][0]
+  const { abi } = privateupload
   if (window.ethereum) {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()
@@ -37,8 +54,14 @@ async function storeFiles(){
         abi,
         signer
     )
-    try {
-        const response = await contract.addcid(cid,files[0]["name"])
+    try {      
+        console.log(iv)
+        const buffer = Buffer.from(iv.buffer);
+        const inv = buffer.toString('hex');
+        console.log(inv);
+        //const buffer = Buffer.from(iv.buffer);
+        //const inv = buffer.toString();
+        const response = await contract.addcid(cid,files[0]["name"],key,inv,)//,iv)
         await response.wait()
         toast.success("Files CID added to blockchain")
 
@@ -47,17 +70,39 @@ async function storeFiles(){
     }
 }
   console.log("Stored files with cid: ", cid)
+  setUp(prev=>!prev)
   return cid
 }
 
-export default function App(){
-  const [fileState, setFileState] = React.useState([])
 
 
-  
+async function getyourFile(cid,password,iv){
+
+  const client = makeStorageClient()
+  const res=await client.get(cid)
+  console.log(res.status)
+  const files=await res.files()
+  if(userMode){
+    FileSaver.saveAs(files[0], files[0].name);
+    console.log(files[0])
+  }else{  
+    try{
+  const buffer = Buffer.from(iv, 'hex');
+  const inv = new Uint8Array(buffer);
+  console.log(inv);
+  //const buffer = Buffer.from(iv);
+  //const inv = new Uint8Array(buffer);
+  await startDecryption(files[0],password,inv)
+  }catch(error){
+    console.log(error)
+  }
+}
+}
+
+
+
   function handleFile(event){
     console.log("runs")
-    setFileState(event.target.files[0])
     if(event.target.files.length>=1){
       document.getElementById("upload-button").disabled = false
     }
@@ -71,23 +116,23 @@ export default function App(){
 
   function handleUpload(event){//handles upload to web3
       event.preventDefault()
-      storeFiles()
+      storeFiles(setUp)
   }
 
 
   
   
   return(
-    <DAppProvider config={{
-      networks: [Kovan, Rinkeby,Goerli]
-    }}>
-      <Navbar />
-      <FileUpload handleFile={handleFile} handleUpload={handleUpload} />
+    <>
+      <Navbar mapping={mapping} privateupload={privateupload} address={address} connected={connected} setAddress={setAddress} setConnected={setConnected} />
+      <FileUpload  connected={connected} handleFile={handleFile} handleUpload={handleUpload} />
+      <button className="login-button info" onClick={()=>setUserMode(prev=>!prev)}>{userMode?"Public":"Private"}-Switch mode</button>
       <div className="table-container">
-        <Table/>
+        <Table connected={connected} mapping={mapping} publicupload={publicupload} privateupload={privateupload} getyourFile={getyourFile} userMode={userMode}/>
       </div>
       <ToastContainer/>
-      </DAppProvider >
+      <Enckey/>
+    </>
   )
 }
 

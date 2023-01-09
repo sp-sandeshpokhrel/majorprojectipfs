@@ -1,26 +1,29 @@
 import React from "react"
-import { useEthers } from "@usedapp/core"
-import publicupload from "../build/Publicupload.json"
-import mapping from "../build/map.json"
 import { utils, ethers } from "ethers"
 import { toast } from "react-toastify"
 
 
 
-export default function Table() {
-    const { account } = useEthers()
-    const isConnected = account !== undefined
-    const puaddress = mapping["5"]["Publicupload"][0]
-    const { abi } = publicupload
+export default function Table({ connected, mapping, publicupload, privateupload, getyourFile, userMode }) {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const puInterface = new utils.Interface(abi)
-    const puContract = new ethers.Contract(puaddress, puInterface, provider)
+    if (userMode) {
+        var puaddress = mapping["5"]["Publicupload"][0]
+        var { abi } = publicupload
+        var puInterface = new utils.Interface(abi)
+        var puContract = new ethers.Contract(puaddress, puInterface, provider)
+    } else {
+        var puaddress = mapping["5"]["privateupload"][0]
+        var { abi } = privateupload
+        var puInterface = new utils.Interface(abi)
+        var puContract = new ethers.Contract(puaddress, puInterface, provider)
+
+    }
+
+
     const [filee, setFile] = React.useState([])
 
 
     async function deletee(cids: string) {
-        const puaddress = mapping["5"]["Publicupload"][0]
-        const { abi } = publicupload
         if (window.ethereum) {
             const signer = provider.getSigner()
             const contract = new ethers.Contract(
@@ -39,10 +42,11 @@ export default function Table() {
     }
 
     async function updateTable() {
-        if (account) {
-            let hhh = await puContract.getusercid(account)
+        if (connected) {
+            const accounts = await provider.listAccounts();
+            let hhh = await puContract.getusercid(accounts[0])
             setFile(hhh)
-            console.log(account)
+            console.log(connected)
             setFile(hhh)
             /* if (typeof filee === 'object') {
                  setFile(current =>
@@ -57,7 +61,7 @@ export default function Table() {
         }
     }
 
-    React.useEffect(() => { updateTable() }, [account])
+    React.useEffect(() => { updateTable() }, [connected, userMode])
 
 
     /*function handleClick(event) {
@@ -113,7 +117,7 @@ export default function Table() {
                             <td>--</td>
                             <td>--</td>
                             <td><button onClick={() => { deletee(element.CID) }}>Delete</button></td>
-                            <td><a href={"https://ipfs.io/ipfs/" + element.CID} target="_blank"><button>See your file</button></a></td>
+                            <td><button onClick={() => userMode ? getyourFile(element.CID) : getyourFile(element.CID, element.key, element.iv)}>Download your file</button></td>
                         </tr>)
                     })
                 }
@@ -122,6 +126,8 @@ export default function Table() {
     </>
     )
 }
+
+//<a href={"https://ipfs.io/ipfs/" + element.CID} target="_blank">
 /*
 {filee.map(element => {
                     return (<tr key={element.CID} id={element.CID}>
